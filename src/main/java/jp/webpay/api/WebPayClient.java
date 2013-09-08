@@ -10,7 +10,10 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.Map;
 
 public class WebPayClient {
     public static final String DEFAULT_BASE = "https://api.webpay.jp/v1";
@@ -43,7 +46,17 @@ public class WebPayClient {
     }
 
     String get(String path) {
+        return get(path, null);
+    }
+
+    String get(String path, Form form) {
         WebTarget target = client.target(apiBase).path(path);
+        if (form != null) {
+            MultivaluedMap<String,String> params = form.asMap();
+            for (Map.Entry<String, List<String>> param : params.entrySet()) {
+                target = target.queryParam(param.getKey(), param.getValue().toArray());
+            }
+        }
         Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
         return processErrorResponse(response);
     }

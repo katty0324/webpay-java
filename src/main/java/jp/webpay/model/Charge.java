@@ -11,8 +11,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class Charge {
-    private WebPayClient client;
+public class Charge extends AbstractModel {
     private String id;
     private String object;
     private Boolean livemode;

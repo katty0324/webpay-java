@@ -11,9 +11,7 @@ import org.junit.Rule;
 
 import java.io.IOException;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 public class ApiTestFixture {
     private static final int PORT = 9229;

@@ -1,8 +1,10 @@
 package jp.webpay.api;
 
 import jp.webpay.model.Charge;
+import jp.webpay.model.ChargeList;
 import jp.webpay.request.CardRequest;
 import jp.webpay.request.ChargeRequest;
+import jp.webpay.request.ListRequest;
 import org.junit.Test;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -81,5 +83,18 @@ public class ChargesTest extends ApiTestFixture {
         assertThat(charge.getCaptured(), is(false));
         charge.capture();
         assertThat(charge.getCaptured(), is(true));
+    }
+
+    @Test
+    public void testAllCharges() throws Exception {
+        stubFor(get("/v1/charges?count=3&offset=0&created%5Bgt%5D=1378000000")
+                .willReturn(response("charges/all")));
+
+        ChargeList charges = client.charges.all(new ListRequest().count(3).createdGt(1378000000));
+
+        assertThat(charges.getCount(), is(11));
+        assertThat(charges.getUrl(), is("/v1/charges"));
+        assertThat(charges.getData().size(), is(3));
+        assertThat(charges.getData().get(0).getId(), is("ch_2X01NDedxdrRcA3"));
     }
 }
