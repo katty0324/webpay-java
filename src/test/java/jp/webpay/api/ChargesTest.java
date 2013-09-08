@@ -14,7 +14,7 @@ public class ChargesTest extends ApiTestFixture {
     public void testCreateCharge() throws Exception {
         stubFor(post("/v1/charges")
                 .withRequestBody(matching(".*amount=1000.*customer=cus_fgR4vI92r54I6oK.*"))
-                .willReturn(response("charges/of_customer")));
+                .willReturn(response("charges/create_with_customer")));
         ChargeRequest request = new ChargeRequest()
                 .amount(1000)
                 .customer("cus_fgR4vI92r54I6oK")
@@ -30,7 +30,7 @@ public class ChargesTest extends ApiTestFixture {
     public void testCreateChargeWithCard() throws Exception {
         stubFor(post("/v1/charges")
                 .withRequestBody(containing("card%5Bname%5D=YUUKO+SHIONJI"))
-                .willReturn(response("charges/with_card")));
+                .willReturn(response("charges/create_with_card")));
         CardRequest card = new CardRequest()
                 .number("4242-4242-4242-4242")
                 .expMonth(12)
