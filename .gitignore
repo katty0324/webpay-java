@@ -1,0 +1,7 @@
+/.gradle
+/build
+/out
+
+/webpay-java.iml
+/webpay-java.ipr
+/webpay-java.iws
