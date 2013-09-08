@@ -13,4 +13,8 @@ public class Charges {
     public Charge create(ChargeRequest request) {
         return Charge.fromJsonResponse(client.post("/charges", request.toForm()));
     }
+
+    public Charge retrieve(String id) {
+        return Charge.fromJsonResponse(client.get("/charges/" + id));
+    }
 }

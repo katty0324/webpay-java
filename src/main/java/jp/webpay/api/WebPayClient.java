@@ -42,6 +42,12 @@ public class WebPayClient {
         return processErrorResponse(response);
     }
 
+    String get(String path) {
+        WebTarget target = client.target(apiBase).path(path);
+        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+        return processErrorResponse(response);
+    }
+
     private String processErrorResponse(Response response) {
         int status = response.getStatus();
         if (status >= 200 && status < 300)  {

@@ -44,4 +44,14 @@ public class ChargesTest extends ApiTestFixture {
         Charge charge = client.charges.create(request);
         assertThat(charge.getCard().getName(), is("YUUKO SHIONJI"));
     }
+
+    @Test
+    public void testRetrieveCharge() throws Exception {
+        stubFor(get("/v1/charges/ch_bWp5EG9smcCYeEx")
+                .willReturn(response("charges/retrieve")));
+
+        Charge charge = client.charges.retrieve("ch_bWp5EG9smcCYeEx");
+        assertThat(charge.getId(), is("ch_bWp5EG9smcCYeEx"));
+        assertThat(charge.getDescription(), is("アイテムの購入"));
+    }
 }

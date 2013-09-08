@@ -2,6 +2,7 @@ package jp.webpay.api;
 
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -29,8 +30,16 @@ public class ApiTestFixture {
     }
 
     protected MappingBuilder post(String path) {
-        return com.github.tomakehurst.wiremock.client.WireMock.post(urlEqualTo(path))
-                .withHeader("Accept", equalTo("application/json"))
+        return withBaseHeaders(WireMock.post(urlEqualTo(path)));
+
+    }
+
+    protected MappingBuilder get(String path) {
+        return withBaseHeaders(WireMock.get(urlEqualTo(path)));
+    }
+
+    private MappingBuilder withBaseHeaders(MappingBuilder builder) {
+        return builder.withHeader("Accept", equalTo("application/json"))
                 .withHeader("Authorization", equalTo("Basic " + encoded));
     }
 
