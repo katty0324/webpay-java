@@ -57,6 +57,11 @@ public class ChargesTest extends ApiTestFixture {
         assertThat(charge.getDescription(), is("アイテムの購入"));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testRetrieveEmptyId() throws Exception {
+        client.charges.retrieve("");
+    }
+
     @Test
     public void testRefundCharge() throws Exception {
         stubFor(get("/v1/charges/ch_bWp5EG9smcCYeEx")
