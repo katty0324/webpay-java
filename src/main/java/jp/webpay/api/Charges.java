@@ -25,4 +25,14 @@ public class Charges {
         form.param("amount", amount.toString());
         return Charge.fromJsonResponse(client, client.post("/charges/" + id + "/refund", form));
     }
+
+    public Charge capture(String id) {
+        return Charge.fromJsonResponse(client, client.post("/charges/" + id + "/capture", new Form()));
+    }
+
+    public Charge capture(String id, long amount) {
+        Form form = new Form();
+        form.param("amount", String.valueOf(amount));
+        return Charge.fromJsonResponse(client, client.post("/charges/" + id + "/capture", form));
+    }
 }

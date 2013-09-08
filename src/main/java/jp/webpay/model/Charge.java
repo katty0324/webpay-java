@@ -57,6 +57,14 @@ public class Charge {
         copyAttributes(client.charges.refund(id, amount));
     }
 
+    public void capture() {
+        copyAttributes(client.charges.capture(id));
+    }
+
+    public void capture(long amount) {
+        copyAttributes(client.charges.capture(id, amount));
+    }
+
     private void copyAttributes(Charge charge) {
         this.amount = charge.amount;
         this.card = charge.card;

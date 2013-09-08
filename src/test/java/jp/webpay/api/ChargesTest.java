@@ -68,4 +68,18 @@ public class ChargesTest extends ApiTestFixture {
         assertThat(charge.getRefunded(), is(true));
         assertThat(charge.getAmountRefunded(), is(charge.getAmount()));
     }
+
+    @Test
+    public void testCaptureCharge() throws Exception {
+        stubFor(get("/v1/charges/ch_2X01NDedxdrRcA3")
+                .willReturn(response("charges/retrieve_not_captured")));
+        stubFor(post("/v1/charges/ch_2X01NDedxdrRcA3/capture")
+                .withHeader("Content-Length", equalTo("0"))
+                .willReturn(response("charges/capture")));
+
+        Charge charge = client.charges.retrieve("ch_2X01NDedxdrRcA3");
+        assertThat(charge.getCaptured(), is(false));
+        charge.capture();
+        assertThat(charge.getCaptured(), is(true));
+    }
 }
