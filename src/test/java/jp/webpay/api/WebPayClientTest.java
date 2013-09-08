@@ -1,13 +1,11 @@
 package jp.webpay.api;
 
-import jp.webpay.exception.APIException;
-import jp.webpay.exception.AuthenticationException;
-import jp.webpay.exception.CardException;
-import jp.webpay.exception.InvalidRequestException;
+import jp.webpay.exception.*;
 import org.junit.Test;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
 
 public class WebPayClientTest extends ApiTestFixture {
@@ -71,6 +69,29 @@ public class WebPayClientTest extends ApiTestFixture {
             assertThat(e.getType(), is("card_error"));
             assertThat(e.getCode(), is("incorrect_number"));
             assertThat(e.getParam(), is("number"));
+            throw e;
+        }
+    }
+
+    @Test(expected = ApiConnectionException.class)
+    public void testServerNotFound() throws Exception {
+        try {
+            new WebPayClient("", "http://127.0.0.1:9999/v1").get("/test");
+        } catch (ApiConnectionException e) {
+            assertThat(e.getMessage(),
+                    is("ApiConnectionException caused by java.net.ConnectException: Connection refused"));
+            throw e;
+        }
+    }
+
+    @Test(expected = ApiConnectionException.class)
+    public void testJsonResponseIsBroken() throws Exception {
+        stubError("errors/broken_json");
+        try {
+            client.get("/test");
+        } catch (ApiConnectionException e) {
+            assertThat(e.getMessage(),
+                    startsWith("Response JSON is broken. Please check connection status and retry."));
             throw e;
         }
     }

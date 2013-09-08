@@ -1,5 +1,6 @@
 package jp.webpay.api;
 
+import jp.webpay.exception.ApiConnectionException;
 import jp.webpay.exception.WebPayException;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
@@ -42,7 +43,12 @@ public class WebPayClient {
 
     String post(String path, Form form) {
         WebTarget target = client.target(apiBase).path(path);
-        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.form(form));
+        Response response;
+        try {
+            response = target.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.form(form));
+        } catch (javax.ws.rs.ProcessingException e) {
+            throw new ApiConnectionException(e);
+        }
         return processErrorResponse(response);
     }
 
@@ -58,7 +64,12 @@ public class WebPayClient {
                 target = target.queryParam(param.getKey(), param.getValue().toArray());
             }
         }
-        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+        Response response;
+        try {
+            response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+        } catch (javax.ws.rs.ProcessingException e) {
+            throw new ApiConnectionException(e);
+        }
         return processErrorResponse(response);
     }
 

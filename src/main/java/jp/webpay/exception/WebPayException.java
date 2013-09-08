@@ -23,7 +23,12 @@ public class WebPayException extends RuntimeException {
     }
 
     public static WebPayException fromJsonResponse(int status, String json) {
-        Object decoded = JSON.decode(json);
+        Object decoded;
+        try {
+            decoded = JSON.decode(json);
+        } catch (net.arnx.jsonic.JSONException e) {
+            throw ApiConnectionException.jsonException(json);
+        }
         Map<String, String> errorInfo = new HashMap<>();
         if (decoded instanceof Map && ((Map) decoded).get("error") instanceof Map) {
             Map errorObject = (Map) ((Map) decoded).get("error");

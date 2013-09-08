@@ -1,6 +1,7 @@
 package jp.webpay.model;
 
 import jp.webpay.api.WebPayClient;
+import jp.webpay.exception.ApiConnectionException;
 import lombok.ToString;
 import net.arnx.jsonic.JSON;
 
@@ -13,7 +14,12 @@ public class ChargeList extends EntityList<Charge> {
     }
 
     public static ChargeList fromJsonResponse(WebPayClient client, String json) {
-        ChargeList list = JSON.decode(json, ChargeList.class);
+        ChargeList list;
+        try {
+            list = JSON.decode(json, ChargeList.class);
+        } catch (net.arnx.jsonic.JSONException e) {
+            throw ApiConnectionException.jsonException(json);
+        }
         for (Charge row : list.getData()) {
             row.client = client;
         }
