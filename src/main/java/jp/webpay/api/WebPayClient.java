@@ -1,5 +1,6 @@
 package jp.webpay.api;
 
+import jp.webpay.exception.WebPayException;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 
@@ -63,10 +64,11 @@ public class WebPayClient {
 
     private String processErrorResponse(Response response) {
         int status = response.getStatus();
+        String data = response.readEntity(String.class);
         if (status >= 200 && status < 300)  {
-            return response.readEntity(String.class);
+            return data;
         } else {
-            throw new RuntimeException("Request failed: " + status + "\n" + response.readEntity(String.class));
+            throw WebPayException.fromJsonResponse(status, data);
         }
     }
 }
