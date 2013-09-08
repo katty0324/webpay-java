@@ -1,6 +1,5 @@
 package jp.webpay.api;
 
-import jp.webpay.model.Charge;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 
@@ -18,6 +17,9 @@ public class WebPayClient {
 
     private final String apiKey;
     private final String apiBase;
+    private final Client client;
+
+    public final Charges charges;
 
     WebPayClient(String apiKey) {
         this(apiKey, DEFAULT_BASE);
@@ -26,19 +28,24 @@ public class WebPayClient {
     WebPayClient(String apiKey, String apiBase) {
         this.apiKey = apiKey;
         this.apiBase = apiBase;
-    }
 
-    public Charge createCharge(Form form) {
         SSLContext ssl = SslConfigurator.newInstance().createSSLContext();
-        Client client = ClientBuilder.newBuilder().sslContext(ssl).build();
+        client = ClientBuilder.newBuilder().sslContext(ssl).build();
         client.register(new HttpBasicAuthFilter(apiKey, ""));
 
-        WebTarget target = client.target(apiBase).path("/charges");
-        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.form(form));
+        charges = new Charges(this);
+    }
 
+    String post(String path, Form form) {
+        WebTarget target = client.target(apiBase).path(path);
+        Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(Entity.form(form));
+        return processErrorResponse(response);
+    }
+
+    private String processErrorResponse(Response response) {
         int status = response.getStatus();
         if (status >= 200 && status < 300)  {
-            return Charge.fromJsonResponse(response.readEntity(String.class));
+            return response.readEntity(String.class);
         } else {
             throw new RuntimeException("Request failed: " + status + "\n" + response.readEntity(String.class));
         }
