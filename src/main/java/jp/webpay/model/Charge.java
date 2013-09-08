@@ -1,5 +1,6 @@
 package jp.webpay.model;
 
+import jp.webpay.api.WebPayClient;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Setter
 @ToString
 public class Charge {
+    private WebPayClient client;
     private String id;
     private String object;
     private Boolean livemode;
@@ -27,8 +29,10 @@ public class Charge {
     private String failureMessage;
     private Long expireTime;
 
-    public static Charge fromJsonResponse(String json) {
-        return JSON.decode(json, Charge.class);
+    public static Charge fromJsonResponse(WebPayClient client, String json) {
+        Charge decoded = JSON.decode(json, Charge.class);
+        decoded.client = client;
+        return decoded;
     }
 
     public Date createdDate() {
@@ -43,5 +47,28 @@ public class Charge {
             return null;
         }
         return new Date(expireTime * 1000);
+    }
+
+    public void refund() {
+        copyAttributes(client.charges.refund(id, amount));
+    }
+
+    public void refund(long amount) {
+        copyAttributes(client.charges.refund(id, amount));
+    }
+
+    private void copyAttributes(Charge charge) {
+        this.amount = charge.amount;
+        this.card = charge.card;
+        this.created = charge.created;
+        this.currency = charge.currency;
+        this.paid = charge.paid;
+        this.captured = charge.captured;
+        this.refunded = charge.refunded;
+        this.amountRefunded = charge.amountRefunded;
+        this.customer = charge.customer;
+        this.description = charge.description;
+        this.failureMessage = charge.failureMessage;
+        this.expireTime = charge.expireTime;
     }
 }
