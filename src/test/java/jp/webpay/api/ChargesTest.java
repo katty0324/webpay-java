@@ -97,4 +97,14 @@ public class ChargesTest extends ApiTestFixture {
         assertThat(charges.getData().size(), is(3));
         assertThat(charges.getData().get(0).getId(), is("ch_2X01NDedxdrRcA3"));
     }
+
+    @Test
+    public void testChargesWithCustomer() throws Exception {
+        // Response is not significant
+        stubFor(get("/v1/charges?count=10&offset=0&customer=cus_fgR4vI92r54I6oK")
+                .willReturn(response("charges/all")));
+
+        ChargeList charges = client.charges.all("cus_fgR4vI92r54I6oK");
+        assertThat(charges.getUrl(), is("/v1/charges"));
+    }
 }
