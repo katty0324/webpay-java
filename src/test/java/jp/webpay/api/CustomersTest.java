@@ -34,4 +34,18 @@ public class CustomersTest extends ApiTestFixture {
         assertThat(customer.getEmail(), is("customer@example.com"));
         assertThat(customer.getActiveCard().getName(), is("YUUKO SHIONJI"));
     }
+
+    @Test
+    public void testRetrieveCustomer() throws Exception {
+        stubFor(get("/v1/customers/cus_39o4Fv82E1et5Xb")
+                .willReturn(response("customers/retrieve")));
+
+        Customer customer = client.customers.retrieve("cus_39o4Fv82E1et5Xb");
+        assertThat(customer.getId(), is("cus_39o4Fv82E1et5Xb"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRetrieveCustomerWithoutId() throws Exception {
+        client.customers.retrieve("");
+    }
 }

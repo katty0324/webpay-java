@@ -12,4 +12,9 @@ public class Customers extends Accessor {
     public Customer create(@NonNull CustomerRequest request) {
         return Customer.fromJsonResponse(client, client.post("/customers", request.toForm()));
     }
+
+    public Customer retrieve(@NonNull String id) {
+        assertId(id);
+        return Customer.fromJsonResponse(client, client.get("/customers/" + id));
+    }
 }
