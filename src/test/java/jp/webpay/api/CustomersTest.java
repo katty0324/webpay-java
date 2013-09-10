@@ -77,4 +77,15 @@ public class CustomersTest extends ApiTestFixture {
         assertThat(customer.getEmail(), is(mail));
         assertThat(customer.getDescription(), is(description));
     }
+
+    @Test
+    public void testDeleteCustomer() throws Exception {
+        stubFor(get("/v1/customers/cus_39o4Fv82E1et5Xb")
+                .willReturn(response("customers/retrieve")));
+        stubFor(delete("/v1/customers/cus_39o4Fv82E1et5Xb")
+                .willReturn(response("customers/delete")));
+
+        Customer customer = client.customers.retrieve("cus_39o4Fv82E1et5Xb");
+        assertThat(customer.delete(), is(true));
+    }
 }

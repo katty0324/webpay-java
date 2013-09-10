@@ -53,6 +53,10 @@ public class Customer extends AbstractModel {
         copyAttributes(client.customers.update(id, request));
     }
 
+    public boolean delete() {
+        return client.customers.delete(id);
+    }
+
     private void copyAttributes(Customer customer) {
         this.created = customer.created;
         this.activeCard = customer.activeCard;

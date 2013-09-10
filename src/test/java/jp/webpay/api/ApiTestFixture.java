@@ -36,6 +36,10 @@ public class ApiTestFixture {
         return withBaseHeaders(WireMock.get(urlEqualTo(path)));
     }
 
+    protected MappingBuilder delete(String path) {
+        return withBaseHeaders(WireMock.delete(urlEqualTo(path)));
+    }
+
     private MappingBuilder withBaseHeaders(MappingBuilder builder) {
         return builder.withHeader("Accept", equalTo("application/json"))
                 .withHeader("Authorization", equalTo("Basic " + encoded));

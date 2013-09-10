@@ -77,6 +77,17 @@ public class WebPayClient {
         return processErrorResponse(response);
     }
 
+    public String delete(String path) {
+        WebTarget target = client.target(apiBase).path(path);
+        Response response;
+        try {
+            response = target.request(MediaType.APPLICATION_JSON_TYPE).delete();
+        } catch (javax.ws.rs.ProcessingException e) {
+            throw new ApiConnectionException(e);
+        }
+        return processErrorResponse(response);
+    }
+
     private String processErrorResponse(Response response) {
         int status = response.getStatus();
         String data = response.readEntity(String.class);
