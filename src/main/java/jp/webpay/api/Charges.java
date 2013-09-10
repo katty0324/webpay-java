@@ -8,11 +8,9 @@ import lombok.NonNull;
 
 import javax.ws.rs.core.Form;
 
-public class Charges {
-    private final WebPayClient client;
-
+public class Charges extends Accessor {
     Charges(@NonNull WebPayClient client) {
-        this.client = client;
+        super(client);
     }
 
     public Charge create(@NonNull ChargeRequest request) {
@@ -62,11 +60,5 @@ public class Charges {
             form.param("customer", customerId);
         }
         return ChargeList.fromJsonResponse(client, client.get("/charges", form));
-    }
-
-    private void assertId(String id) {
-        if (id == null || id.equals("")) {
-            throw new IllegalArgumentException("The given ID is empty");
-        }
     }
 }

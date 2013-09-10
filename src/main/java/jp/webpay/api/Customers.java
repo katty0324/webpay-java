@@ -4,11 +4,9 @@ import jp.webpay.model.Customer;
 import jp.webpay.request.CustomerRequest;
 import lombok.NonNull;
 
-public class Customers {
-    private final WebPayClient client;
-
+public class Customers extends Accessor {
     Customers(@NonNull WebPayClient client) {
-        this.client = client;
+        super(client);
     }
 
     public Customer create(@NonNull CustomerRequest request) {
