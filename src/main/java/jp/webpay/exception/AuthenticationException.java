@@ -5,7 +5,7 @@ import lombok.NonNull;
 import java.util.Map;
 
 public class AuthenticationException extends WebPayException {
-    public AuthenticationException(int status, @NonNull Map<String, String> errorInfo) {
+    AuthenticationException(int status, @NonNull Map<String, String> errorInfo) {
         super(errorInfo.get("message"), status, errorInfo);
     }
 }

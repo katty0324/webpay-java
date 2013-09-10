@@ -13,7 +13,7 @@ public class CardException extends WebPayException {
     @Getter
     private final String param;
 
-    public CardException(int status, @NonNull Map<String, String> errorInfo) {
+    CardException(int status, @NonNull Map<String, String> errorInfo) {
         super(errorInfo.get("message"), status, errorInfo);
         this.type = errorInfo.get("type");
         this.code = errorInfo.get("code");

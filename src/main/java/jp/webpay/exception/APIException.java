@@ -9,7 +9,7 @@ public class APIException extends WebPayException {
     @Getter
     private final String type;
 
-    public APIException(int status, @NonNull Map<String, String> errorInfo) {
+    APIException(int status, @NonNull Map<String, String> errorInfo) {
         super(errorInfo.get("message"), status, errorInfo);
         this.type = errorInfo.get("type");
     }
