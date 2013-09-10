@@ -48,4 +48,33 @@ public class CustomersTest extends ApiTestFixture {
     public void testRetrieveCustomerWithoutId() throws Exception {
         client.customers.retrieve("");
     }
+
+    @Test
+    public void testUpdateRetrievedCustomer() throws Exception {
+        String mail = "newmail@example.com";
+        String description = "New description";
+        CardRequest card = new CardRequest()
+                .number("4242-4242-4242-4242")
+                .expMonth(12)
+                .expYear(2016)
+                .cvc(123)
+                .name("YUUKO SHIONJI");
+
+        stubFor(get("/v1/customers/cus_39o4Fv82E1et5Xb")
+                .willReturn(response("customers/retrieve")));
+        stubFor(post("/v1/customers/cus_39o4Fv82E1et5Xb")
+                .withRequestBody(containing("card%5Bexp_year%5D=2016"))
+                .withRequestBody(containing("email=newmail"))
+                .withRequestBody(containing("description=New"))
+                .willReturn(response("customers/update")));
+
+        Customer customer = client.customers.retrieve("cus_39o4Fv82E1et5Xb");
+        customer.setNewCard(card);
+        customer.setEmail(mail);
+        customer.setDescription(description);
+        customer.save();
+        assertThat(customer.getActiveCard().getExpYear(), is(2016));
+        assertThat(customer.getEmail(), is(mail));
+        assertThat(customer.getDescription(), is(description));
+    }
 }

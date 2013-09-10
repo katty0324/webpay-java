@@ -17,4 +17,9 @@ public class Customers extends Accessor {
         assertId(id);
         return Customer.fromJsonResponse(client, client.get("/customers/" + id));
     }
+
+    public Customer update(@NonNull String id, @NonNull CustomerRequest request) {
+        assertId(id);
+        return Customer.fromJsonResponse(client, client.post("/customers/" + id, request.toForm()));
+    }
 }
