@@ -2,7 +2,9 @@ package jp.webpay.api;
 
 import jp.webpay.exception.ApiConnectionException;
 import jp.webpay.model.Customer;
+import jp.webpay.model.CustomerList;
 import jp.webpay.request.CustomerRequest;
+import jp.webpay.request.ListRequest;
 import lombok.NonNull;
 import net.arnx.jsonic.JSON;
 
@@ -37,5 +39,13 @@ public class Customers extends Accessor {
         } catch (net.arnx.jsonic.JSONException | ClassCastException e) {
             throw ApiConnectionException.jsonException(json);
         }
+    }
+
+    public CustomerList all() {
+        return all(new ListRequest());
+    }
+
+    public CustomerList all(@NonNull ListRequest request) {
+        return CustomerList.fromJsonResponse(client, client.get("/customers", request.toForm()));
     }
 }

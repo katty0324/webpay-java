@@ -1,8 +1,10 @@
 package jp.webpay.api;
 
 import jp.webpay.model.Customer;
+import jp.webpay.model.CustomerList;
 import jp.webpay.request.CardRequest;
 import jp.webpay.request.CustomerRequest;
+import jp.webpay.request.ListRequest;
 import org.junit.Test;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.containing;
@@ -87,5 +89,18 @@ public class CustomersTest extends ApiTestFixture {
 
         Customer customer = client.customers.retrieve("cus_39o4Fv82E1et5Xb");
         assertThat(customer.delete(), is(true));
+    }
+
+    @Test
+    public void testAllCustomers() throws Exception {
+        stubFor(get("/v1/customers?count=3&offset=0&created%5Bgt%5D=1378000000")
+                .willReturn(response("customers/all")));
+
+        CustomerList customers = client.customers.all(new ListRequest().count(3).createdGt(1378000000));
+
+        assertThat(customers.getCount(), is(4));
+        assertThat(customers.getUrl(), is("/v1/customers"));
+        assertThat(customers.getData().size(), is(3));
+        assertThat(customers.getData().get(0).getId(), is("cus_39o9oU1N1dRm4LZ"));
     }
 }
