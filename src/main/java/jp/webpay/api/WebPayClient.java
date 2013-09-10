@@ -27,6 +27,7 @@ public class WebPayClient {
     private final Client client;
 
     public final Charges charges;
+    public final Customers customers;
 
     public WebPayClient(@NonNull String apiKey) {
         this(apiKey, DEFAULT_BASE);
@@ -41,6 +42,7 @@ public class WebPayClient {
         client.register(new HttpBasicAuthFilter(apiKey, ""));
 
         charges = new Charges(this);
+        customers = new Customers(this);
     }
 
     String post(@NonNull String path, Form form) {
