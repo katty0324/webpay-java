@@ -3,6 +3,7 @@ package jp.webpay.model;
 import jp.webpay.api.WebPayClient;
 import jp.webpay.exception.ApiConnectionException;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import net.arnx.jsonic.JSON;
@@ -29,7 +30,7 @@ public class Charge extends AbstractModel {
     private String failureMessage;
     private Long expireTime;
 
-    public static Charge fromJsonResponse(WebPayClient client, String json) {
+    public static Charge fromJsonResponse(@NonNull WebPayClient client, @NonNull String json) {
         Charge decoded;
         try {
             decoded = JSON.decode(json, Charge.class);

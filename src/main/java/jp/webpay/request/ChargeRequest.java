@@ -1,5 +1,7 @@
 package jp.webpay.request;
 
+import lombok.NonNull;
+
 import javax.ws.rs.core.Form;
 
 public class ChargeRequest implements RequestEntity {
@@ -37,7 +39,7 @@ public class ChargeRequest implements RequestEntity {
         return this;
     }
 
-    public ChargeRequest currency(String currency) {
+    public ChargeRequest currency(@NonNull String currency) {
         this.currency = currency;
         return this;
     }

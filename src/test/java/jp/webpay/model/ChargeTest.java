@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThat;
 
 public class ChargeTest {
 
-    private static final WebPayClient NOT_USED_CLIENT = null;
+    private static final WebPayClient NOT_USED_CLIENT = new WebPayClient("fake_key");
 
     @Test
     public void generateChargeFromJSON() {

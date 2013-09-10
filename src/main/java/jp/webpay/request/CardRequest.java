@@ -1,17 +1,19 @@
 package jp.webpay.request;
 
+import lombok.NonNull;
+
 import javax.ws.rs.core.Form;
 
 public class CardRequest {
     private String number, name;
     private Integer expMonth, expYear, cvc;
 
-    public CardRequest number(String number) {
+    public CardRequest number(@NonNull String number) {
         this.number = number;
         return this;
     }
 
-    public CardRequest name(String name) {
+    public CardRequest name(@NonNull String name) {
         this.name = name;
         return this;
     }

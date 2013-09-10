@@ -2,6 +2,8 @@ package jp.webpay.api;
 
 import jp.webpay.exception.ApiConnectionException;
 import jp.webpay.exception.WebPayException;
+import lombok.NonNull;
+import lombok.experimental.NonFinal;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.filter.HttpBasicAuthFilter;
 
@@ -26,11 +28,11 @@ public class WebPayClient {
 
     public final Charges charges;
 
-    WebPayClient(String apiKey) {
+    public WebPayClient(@NonNull String apiKey) {
         this(apiKey, DEFAULT_BASE);
     }
 
-    WebPayClient(String apiKey, String apiBase) {
+    public WebPayClient(@NonNull String apiKey, @NonNull String apiBase) {
         this.apiKey = apiKey;
         this.apiBase = apiBase;
 
@@ -41,7 +43,7 @@ public class WebPayClient {
         charges = new Charges(this);
     }
 
-    String post(String path, Form form) {
+    String post(@NonNull String path, Form form) {
         WebTarget target = client.target(apiBase).path(path);
         Response response;
         try {
@@ -52,11 +54,11 @@ public class WebPayClient {
         return processErrorResponse(response);
     }
 
-    String get(String path) {
+    String get(@NonNull String path) {
         return get(path, null);
     }
 
-    String get(String path, Form form) {
+    String get(@NonNull String path, Form form) {
         WebTarget target = client.target(apiBase).path(path);
         if (form != null) {
             MultivaluedMap<String,String> params = form.asMap();
