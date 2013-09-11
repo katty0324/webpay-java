@@ -1,10 +1,14 @@
 package jp.webpay.api;
 
+import jp.webpay.model.Event;
 import jp.webpay.model.EventList;
 import jp.webpay.request.ListRequest;
 import org.junit.Test;
 
+import java.util.Map;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -22,5 +26,19 @@ public class EventsTest extends ApiTestFixture {
         assertThat(events.getData().get(0).getId(), is("evt_39o9oUevb5NCeM1"));
         assertThat((String)events.getData().get(0).getData().getObject().get("id"),
                 is("cus_39o9oU1N1dRm4LZ"));
+    }
+
+    @Test
+    public void testRetrieveEvent() throws Exception {
+        stubFor(get("/v1/events/evt_39o9oUevb5NCeM1")
+                .willReturn(response("events/retrieve")));
+
+        Event event = client.events.retrieve("evt_39o9oUevb5NCeM1");
+
+        assertThat(event.getId(), is("evt_39o9oUevb5NCeM1"));
+        assertThat(event.getPendingWebhooks(), is(0));
+        assertThat((String)event.getData().getObject().get("id"),
+                is("cus_39o9oU1N1dRm4LZ"));
+        assertThat(event.getData().getObject().get("active_card"), instanceOf(Map.class));
     }
 }
