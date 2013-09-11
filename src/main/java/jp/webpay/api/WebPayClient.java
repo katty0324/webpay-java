@@ -81,7 +81,7 @@ public class WebPayClient {
         return processErrorResponse(response);
     }
 
-    public String delete(String path) {
+    String delete(String path) {
         WebTarget target = client.target(apiBase).path(path);
         Response response;
         try {
