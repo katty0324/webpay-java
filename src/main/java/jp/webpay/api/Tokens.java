@@ -12,4 +12,9 @@ public class Tokens extends Accessor {
     public Token create(@NonNull CardRequest request) {
         return Token.fromJsonResponse(client, client.post("/tokens", request.toForm()));
     }
+
+    public Token retrieve(@NonNull String id) {
+        assertId(id);
+        return Token.fromJsonResponse(client, client.get("/tokens/" + id));
+    }
 }

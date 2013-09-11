@@ -27,4 +27,18 @@ public class TokensTest extends ApiTestFixture {
         assertThat(token.getUsed(), is(false));
         assertThat(token.getCard().getName(), is("YUUKO SHIONJI"));
     }
+
+    @Test
+     public void testRetrieveToken() throws Exception {
+        stubFor(get("/v1/tokens/tok_3dw2T20rzekM1Kf")
+                .willReturn(response("tokens/retrieve")));
+
+        Token token = client.tokens.retrieve("tok_3dw2T20rzekM1Kf");
+        assertThat(token.getId(), is("tok_3dw2T20rzekM1Kf"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRetrieveTokenWithoutId() throws Exception {
+        client.tokens.retrieve("");
+    }
 }
