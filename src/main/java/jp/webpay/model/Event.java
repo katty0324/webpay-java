@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import net.arnx.jsonic.JSON;
 
+import java.util.Date;
 import java.util.Map;
 
 @Setter
@@ -30,6 +31,10 @@ public class Event extends AbstractModel {
         }
         decoded.client = client;
         return decoded;
+    }
+
+    public Date createdDate() {
+        return timestampToDate(created);
     }
 
     @Getter

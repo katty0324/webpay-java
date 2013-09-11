@@ -39,10 +39,7 @@ public class Customer extends AbstractModel {
     }
 
     public Date createdDate() {
-        if (created == null) {
-            return null;
-        }
-        return new Date(created * 1000);
+        return timestampToDate(created);
     }
 
     public void save() {

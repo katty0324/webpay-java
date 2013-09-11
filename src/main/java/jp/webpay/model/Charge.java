@@ -42,17 +42,11 @@ public class Charge extends AbstractModel {
     }
 
     public Date createdDate() {
-        if (created == null) {
-            return null;
-        }
-        return new Date(created * 1000);
+        return timestampToDate(created);
     }
 
     public Date expireDate() {
-        if (expireTime == null) {
-            return null;
-        }
-        return new Date(expireTime * 1000);
+        return timestampToDate(expireTime);
     }
 
     public void refund() {

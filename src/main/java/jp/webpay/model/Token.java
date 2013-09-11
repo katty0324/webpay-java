@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 import net.arnx.jsonic.JSON;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @ToString
@@ -27,5 +29,9 @@ public class Token extends AbstractModel {
         }
         decoded.client = client;
         return decoded;
+    }
+
+    public Date createdDate() {
+        return timestampToDate(created);
     }
 }
