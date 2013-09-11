@@ -28,6 +28,7 @@ public class WebPayClient {
 
     public final Charges charges;
     public final Customers customers;
+    public final Tokens tokens;
 
     public WebPayClient(@NonNull String apiKey) {
         this(apiKey, DEFAULT_BASE);
@@ -43,6 +44,7 @@ public class WebPayClient {
 
         charges = new Charges(this);
         customers = new Customers(this);
+        tokens = new Tokens(this);
     }
 
     String post(@NonNull String path, Form form) {

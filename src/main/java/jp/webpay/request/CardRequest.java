@@ -4,7 +4,7 @@ import lombok.NonNull;
 
 import javax.ws.rs.core.Form;
 
-public class CardRequest {
+public class CardRequest implements RequestEntity {
     private String number, name;
     private Integer expMonth, expYear, cvc;
 
@@ -39,5 +39,12 @@ public class CardRequest {
         form.param("card[exp_year]", expYear.toString());
         form.param("card[cvc]", cvc.toString());
         form.param("card[name]", name);
+    }
+
+    @Override
+    public Form toForm() {
+        Form form = new Form();
+        addParams(form);
+        return form;
     }
 }
