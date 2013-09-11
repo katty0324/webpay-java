@@ -56,7 +56,7 @@ public class Charges extends Accessor {
 
     public ChargeList all(@NonNull ListRequest request, String customerId) {
         Form form = request.toForm();
-        if (customerId != null && !customerId.equals("")) {
+        if (customerId != null && !customerId.isEmpty()) {
             form.param("customer", customerId);
         }
         return ChargeList.fromJsonResponse(client, client.get("/charges", form));

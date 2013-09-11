@@ -59,7 +59,7 @@ public class ApiTestFixture {
             } else if (bodyStarted) {
                 sb.append(line);
                 sb.append("\r\n");
-            } else if (line.equals("")) {
+            } else if (line.isEmpty()) {
                 bodyStarted = true;
             } else {
                 String[] split = line.split(":", 2);

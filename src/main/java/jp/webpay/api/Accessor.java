@@ -8,7 +8,7 @@ abstract class Accessor {
     }
 
     protected void assertId(String id) {
-        if (id == null || id.equals("")) {
+        if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("The given ID is empty");
         }
     }

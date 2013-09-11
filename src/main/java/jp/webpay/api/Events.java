@@ -31,7 +31,7 @@ public class Events extends Accessor {
 
     public EventList all(@NonNull ListRequest request, String type) {
         Form form = request.toForm();
-        if (type != null && !type.equals("")) {
+        if (type != null && !type.isEmpty()) {
             form.param("type", type);
         }
         return EventList.fromJsonResponse(client, client.get("/events", form));
