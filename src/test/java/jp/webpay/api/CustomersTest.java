@@ -7,8 +7,7 @@ import jp.webpay.request.CustomerRequest;
 import jp.webpay.request.ListRequest;
 import org.junit.Test;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.containing;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -102,5 +101,13 @@ public class CustomersTest extends ApiTestFixture {
         assertThat(customers.getUrl(), is("/v1/customers"));
         assertThat(customers.getData().size(), is(3));
         assertThat(customers.getData().get(0).getId(), is("cus_39o9oU1N1dRm4LZ"));
+    }
+
+    @Test
+    public void testAllCustomersWithoutArgument() throws Exception {
+        String path = "/v1/customers?count=10&offset=0";
+        stubFor(get(path).willReturn(response("customers/all")));
+        client.customers.all();
+        verify(getRequestedFor(urlEqualTo(path)));
     }
 }

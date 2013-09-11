@@ -105,11 +105,17 @@ public class ChargesTest extends ApiTestFixture {
 
     @Test
     public void testChargesWithCustomer() throws Exception {
-        // Response is not significant
-        stubFor(get("/v1/charges?count=10&offset=0&customer=cus_fgR4vI92r54I6oK")
-                .willReturn(response("charges/all")));
+        String path = "/v1/charges?count=10&offset=0&customer=cus_fgR4vI92r54I6oK";
+        stubFor(get(path).willReturn(response("charges/all")));
+        client.charges.all("cus_fgR4vI92r54I6oK");
+        verify(getRequestedFor(urlEqualTo(path)));
+    }
 
-        ChargeList charges = client.charges.all("cus_fgR4vI92r54I6oK");
-        assertThat(charges.getUrl(), is("/v1/charges"));
+    @Test
+    public void testChargesWithoutParams() throws Exception {
+        String path = "/v1/charges?count=10&offset=0";
+        stubFor(get(path).willReturn(response("charges/all")));
+        client.charges.all();
+        verify(getRequestedFor(urlEqualTo(path)));
     }
 }

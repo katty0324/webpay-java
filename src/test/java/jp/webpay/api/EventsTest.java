@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.Map;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,6 +26,22 @@ public class EventsTest extends ApiTestFixture {
         assertThat(events.getData().get(0).getId(), is("evt_39o9oUevb5NCeM1"));
         assertThat((String)events.getData().get(0).getData().getObject().get("id"),
                 is("cus_39o9oU1N1dRm4LZ"));
+    }
+
+    @Test
+    public void testAllCustomersWithoutParams() throws Exception {
+        String path = "/v1/events?count=10&offset=0";
+        stubFor(get(path).willReturn(response("events/all_with_type")));
+        client.events.all();
+        verify(getRequestedFor(urlEqualTo(path)));
+    }
+
+    @Test
+    public void testAllCustomersWithType() throws Exception {
+        String path = "/v1/events?count=10&offset=0&type=*.created";
+        stubFor(get(path).willReturn(response("events/all_with_type")));
+        client.events.all("*.created");
+        verify(getRequestedFor(urlEqualTo(path)));
     }
 
     @Test
