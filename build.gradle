@@ -1,8 +1,28 @@
 apply plugin: "java"
 apply plugin: "idea"
 
+description = 'WebPay Java bindings'
+group = 'jp.webpay'
+version = '1.0.0'
+
 task wrapper(type: Wrapper) {
     gradleVersion = '1.7'
+}
+
+task javadocJar(type: Jar, dependsOn:javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
+task sourcesJar(type: Jar, dependsOn:classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+artifacts {
+  archives jar
+  archives javadocJar
+  archives sourcesJar
 }
 
 repositories {
@@ -17,4 +37,8 @@ dependencies {
     testCompile 'junit:junit:4.11'
     testCompile 'com.github.tomakehurst:wiremock:1.33'
     testCompile 'commons-io:commons-io:2.4'
+}
+
+if (gradle.startParameter.taskNames.contains('uploadArchives')) {
+  apply from: 'build.publish.gradle'
 }
