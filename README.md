@@ -38,8 +38,9 @@ CardRequest card = new CardRequest()
 
 ChargeRequest request = new ChargeRequest()
   .amount(400)
-  .description("アイテムの購入 with Java")
-  .card(card);
+  .currency("jpy")
+  .card(card)
+  .description("アイテムの購入 with Java");
 
 client.charges.create(request)
 ```
