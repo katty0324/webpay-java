@@ -35,8 +35,10 @@ public class Customers extends Accessor {
 
         try {
             Map data = JSON.decode(json);
-            return (boolean)data.get("deleted");
-        } catch (net.arnx.jsonic.JSONException | ClassCastException e) {
+            return (Boolean)data.get("deleted");
+        } catch (net.arnx.jsonic.JSONException ignored) {
+            throw ApiConnectionException.jsonException(json);
+        } catch (ClassCastException ignored) {
             throw ApiConnectionException.jsonException(json);
         }
     }
