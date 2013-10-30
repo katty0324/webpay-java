@@ -1,6 +1,6 @@
 # webpay-java
 
-WebPay Java bindings https://webpay.jp
+WebPay Java (1.6 and later) bindings https://webpay.jp
 
 ## Installation
 
