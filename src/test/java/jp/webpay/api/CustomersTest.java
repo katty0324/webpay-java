@@ -2,6 +2,7 @@ package jp.webpay.api;
 
 import jp.webpay.model.Customer;
 import jp.webpay.model.CustomerList;
+import jp.webpay.model.RetrievedCustomer;
 import jp.webpay.request.CardRequest;
 import jp.webpay.request.CustomerRequest;
 import jp.webpay.request.ListRequest;
@@ -9,6 +10,7 @@ import org.junit.Test;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class CustomersTest extends ApiTestFixture {
@@ -41,13 +43,27 @@ public class CustomersTest extends ApiTestFixture {
         stubFor(get("/v1/customers/cus_39o4Fv82E1et5Xb")
                 .willReturn(response("customers/retrieve")));
 
-        Customer customer = client.customers.retrieve("cus_39o4Fv82E1et5Xb");
+        RetrievedCustomer customer = client.customers.retrieve("cus_39o4Fv82E1et5Xb");
         assertThat(customer.getId(), is("cus_39o4Fv82E1et5Xb"));
+        assertThat(customer.isDeleted(), is(false));
+        assertThat(customer.getCustomer().getEmail(), is("customer@example.com"));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testRetrieveCustomerWithoutId() throws Exception {
         client.customers.retrieve("");
+    }
+
+    @Test
+    public void testRetrieveDeletedCustomer() throws Exception {
+        String id = "cus_7GafGMbML8R28Io";
+        stubFor(get("/v1/customers/" + id)
+                .willReturn(response("customers/retrieve_deleted")));
+
+        RetrievedCustomer customer = client.customers.retrieve(id);
+        assertThat(customer.getId(), is(id));
+        assertThat(customer.isDeleted(), is(true));
+        assertThat(customer.getCustomer(), is(nullValue()));
     }
 
     @Test
@@ -69,7 +85,7 @@ public class CustomersTest extends ApiTestFixture {
                 .withRequestBody(containing("description=New"))
                 .willReturn(response("customers/update")));
 
-        Customer customer = client.customers.retrieve("cus_39o4Fv82E1et5Xb");
+        Customer customer = client.customers.retrieve("cus_39o4Fv82E1et5Xb").getCustomer();
         customer.setNewCard(card);
         customer.setEmail(mail);
         customer.setDescription(description);
@@ -86,7 +102,7 @@ public class CustomersTest extends ApiTestFixture {
         stubFor(delete("/v1/customers/cus_39o4Fv82E1et5Xb")
                 .willReturn(response("customers/delete")));
 
-        Customer customer = client.customers.retrieve("cus_39o4Fv82E1et5Xb");
+        Customer customer = client.customers.retrieve("cus_39o4Fv82E1et5Xb").getCustomer();
         assertThat(customer.delete(), is(true));
     }
 
