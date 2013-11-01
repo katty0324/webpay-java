@@ -35,7 +35,7 @@ public class RetrievedCustomer {
         } catch (net.arnx.jsonic.JSONException e) {
             throw ApiConnectionException.jsonException(json);
         }
-        if (decoded.containsKey("deleted") && decoded.get("deleted") == true) {
+        if (decoded.containsKey("deleted")) {
             return new RetrievedCustomer((String)decoded.get("id"));
         } else {
             return new RetrievedCustomer(Customer.fromJsonResponse(client, json));
