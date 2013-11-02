@@ -1,4 +1,4 @@
-# webpay-java
+# webpay-java [![Build Status](https://travis-ci.org/webpay/webpay-java.png)](https://travis-ci.org/webpay/webpay-java)
 
 WebPay Java (1.6 and later) bindings https://webpay.jp
 
