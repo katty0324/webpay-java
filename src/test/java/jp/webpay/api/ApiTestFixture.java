@@ -7,12 +7,14 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 
 import java.io.IOException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
+@Ignore
 public class ApiTestFixture {
     private static final int PORT = 9229;
     protected WebPayClient client;
