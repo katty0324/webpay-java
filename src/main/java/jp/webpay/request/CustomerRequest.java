@@ -4,17 +4,19 @@ import javax.ws.rs.core.Form;
 
 public class CustomerRequest implements RequestEntity {
     private CardRequest card;
-    private TokenRequest token;
+    private String cardToken;
     private String email;
     private String description;
 
     public CustomerRequest card(CardRequest card) {
         this.card = card;
+        this.cardToken = null;
         return this;
     }
 
-    public CustomerRequest token(TokenRequest token) {
-        this.token = token;
+    public CustomerRequest card(String card) {
+        this.card = null;
+        this.cardToken = card;
         return this;
     }
 
@@ -33,9 +35,8 @@ public class CustomerRequest implements RequestEntity {
         Form form = new Form();
         if (card != null) {
             card.addParams(form);
-        }
-        if (token != null) {
-            token.addParams(form);
+        } else if (cardToken != null) {
+            form.param("card", cardToken);
         }
         if (email != null && !email.isEmpty()) {
             form.param("email", email);
