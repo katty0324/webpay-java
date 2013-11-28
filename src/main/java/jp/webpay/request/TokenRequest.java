@@ -10,10 +10,14 @@ public class TokenRequest implements RequestEntity {
         return this;
     }
 
+    public void addParams(Form form) {
+        form.param("card", card);
+    }
+
     @Override
     public Form toForm() {
         Form form = new Form();
-        form.param("card", card);
+        addParams(form);
         return form;
     }
 }
